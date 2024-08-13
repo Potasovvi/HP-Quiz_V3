@@ -19,6 +19,9 @@
         <input type="text" id="cognome" name="cognome" required><br><br>
         <button type="submit">Salva</button>
     </form>
+    <br>
+    <button id="checkData">Controlla Dati</button>
+    <div id="dataDisplay"></div>
   </div>
 
   <script>
@@ -76,6 +79,30 @@
       } catch (e) {
         console.error('Errore aggiungendo il partecipante:', e);
         alert('Si è verificato un errore durante la registrazione. Riprova più tardi.');
+      }
+    });
+
+    // Controlla i dati
+    document.getElementById('checkData').addEventListener('click', async function() {
+      try {
+        const querySnapshot = await db.collection('Partecipanti').get();
+        const dataDisplay = document.getElementById('dataDisplay');
+        dataDisplay.innerHTML = '';
+
+        if (querySnapshot.empty) {
+          dataDisplay.innerHTML = 'Nessun partecipante trovato.';
+          return;
+        }
+
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement('div');
+          div.textContent = `Nome: ${data.nome}, Cognome: ${data.cognome}, Punteggio: ${data.punteggio}`;
+          dataDisplay.appendChild(div);
+        });
+      } catch (e) {
+        console.error('Errore recuperando i dati:', e);
+        alert('Si è verificato un errore durante il recupero dei dati.');
       }
     });
   </script>
