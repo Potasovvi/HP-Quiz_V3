@@ -84,11 +84,14 @@
 
     // Controlla i dati
     document.getElementById('checkData').addEventListener('click', async function() {
+      console.log('Pulsante "Controlla Dati" cliccato');
+      const dataDisplay = document.getElementById('dataDisplay');
+      dataDisplay.innerHTML = '';
+
       try {
         const querySnapshot = await db.collection('Partecipanti').get();
-        const dataDisplay = document.getElementById('dataDisplay');
-        dataDisplay.innerHTML = '';
-
+        console.log('Dati recuperati:', querySnapshot.docs.map(doc => doc.data()));
+        
         if (querySnapshot.empty) {
           dataDisplay.innerHTML = 'Nessun partecipante trovato.';
           return;
